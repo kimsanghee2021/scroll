@@ -12,13 +12,7 @@ let posArr = null;
 setPos();
 
 //window.resize 일어낫을떄
-window.addEventListener('resize', () => {
-    setPos();
-    //사이즈를 조정해도 현재의 위치값에 고정
-    const active = ul.querySelector('li.on');
-    const activeIndex = lis_arr.indexOf(active);  
-    window.scroll(0,posArr[activeIndex]); 
-});
+window.addEventListener('resize',setPos);
 
 //각각 li 버튼을 눌럿을때 일어나는 일
 lis.forEach(function(li,idx){
@@ -31,9 +25,36 @@ lis.forEach(function(li,idx){
 //window.scroll이 일어났을때 할 일
 window.addEventListener('scroll',activation);
 
+//마우스 휠 이벤트
+//마우스 휠 이벤트 발생 시 현재 이벤트가 발생한 박스 위에서 위에 아래 박스로 자동 이동
+sections.forEach((section,idx)=>{
+    section.addEventListener('mousewheel',function(e){
+        const activeEl = document.querySelector('section.on');
+        const arrSec = Array.from(sections);
+        const activeIdx = arrSec.indexOf(activeEl);
+
+        // console.log(e);
+        if(e.deltaY > 0){
+            if(activeIdx!== sections.length-1){
+                movescroll(activeIdx + 1);
+            }
+        }else if(e.deltaY < 0){
+            if(activeIdx !== 0){
+                movescroll(activeIdx-1);
+            }
+
+        }
+    })
+});
+
+
 function setPos(){
     posArr = [];
     for(const sec of sections) posArr.push(sec.offsetTop);
+    //사이즈를 조정해도 현재의 위치값에 고정
+    const active = ul.querySelector('li.on');
+    const activeIndex = lis_arr.indexOf(active);  
+    window.scroll(0,posArr[activeIndex]); 
 }
 
 function activation(){

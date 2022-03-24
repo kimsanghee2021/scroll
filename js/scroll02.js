@@ -23,14 +23,15 @@ btns.forEach((el,idx)=>{
 window.addEventListener('scroll',scrollActive);
 
 //resize event
-window.addEventListener('resize', function(){
-    resize();
-    const active = ul.querySelector('li.on');
-    const activeIdx = btnsArr.indexOf(active);
-    window.scroll(0,posArr[activeIdx]); 
+window.addEventListener('resize', resize);
 
+//mouseWheel
+sections.forEach(function(sec, idx){
+    sec.addEventListener('mousewheel',function(e){
+        e.preventDefault();
+        mouseWheel();
+    });
 });
-
 
 
 
@@ -64,4 +65,10 @@ function resize(){
     //각 섹션의 offsetTop값 구해서 빈배열에 담기
     posArr = [];
     for(const sec of sections) posArr.push(sec.offsetTop);
+    const active = ul.querySelector('li.on');
+    const activeIdx = btnsArr.indexOf(active);
+    window.scroll(0,posArr[activeIdx]); 
+}
+function mouseWheel(){
+    
 }

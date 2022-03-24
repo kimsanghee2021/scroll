@@ -23,7 +23,16 @@ btns.forEach((el,idx)=>{
 window.addEventListener('scroll',scrollActive);
 
 //resize event
-window.addEventListener('resize', resize);
+window.addEventListener('resize', function(){
+    resize();
+    const active = ul.querySelector('li.on');
+    const activeIdx = btnsArr.indexOf(active);
+    window.scroll(0,posArr[activeIdx]); 
+
+});
+
+
+
 
 function scrollAni(idx){
     new Animate(window,{
@@ -31,7 +40,7 @@ function scrollAni(idx){
         value : posArr[idx],
         duration : 500,
         callback : function(){
-          return  enableClick = true;
+            return  enableClick = true;
         }
     });
 }

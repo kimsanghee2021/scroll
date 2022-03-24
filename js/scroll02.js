@@ -9,18 +9,32 @@ for(const sec of sections) posArr.push(sec.offsetTop);
 
 
 //각각 li 버튼을 눌럿을때 일어나는 일
-btns.forEach(function(el,idx){
-    el.addEventListener('click',function(){
-
+btns.forEach((el,idx)=>{
+    el.addEventListener('click', e =>{
         new Animate(window,{
             prop : 'scroll',
             value : posArr[idx],
             duration : 500
         });
-        for(const btn of btns){
-            btn.classList.remove('on');
-            btns[idx].classList.add('on');
-        }
 
+    });
+});
+
+//윈도우에서 스크롤 햇을 시 일어나는 일 
+window.addEventListener('scroll',function(){
+    const scroll = window.scrollY;
+    console.log(scroll);
+    sections.forEach((sec,idx)=>{
+        if(scroll >= posArr[idx]){
+            for(const btn of btns){
+                btn.classList.remove('on');
+                btns[idx].classList.add('on');
+            }
+
+            for(const sec of sections){
+                sec.classList.remove('on');
+                sections[idx].classList.add('on');
+            }   
+        }
     });
 });

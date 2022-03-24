@@ -2,28 +2,41 @@ const sections  = document.querySelectorAll('section');
 const ul = document.querySelector('ul');
 const btns = ul.querySelectorAll('ul li');
 const btnsArr = Array.from(btns); //유사 배열 객체를 배열로 변경해주는 기능 
-let posArr = [];
+let posArr = null;
+let enableClick = true;
 
-//각 섹션의 offsetTop값 구해서 빈배열에 담기
-for(const sec of sections) posArr.push(sec.offsetTop);
+//loading Evnet
+resize();
 
-
-//각각 li 버튼을 눌럿을때 일어나는 일
+//click event
 btns.forEach((el,idx)=>{
     el.addEventListener('click', e =>{
-        new Animate(window,{
-            prop : 'scroll',
-            value : posArr[idx],
-            duration : 500
-        });
+        if(enableClick){
+            enableClick = false;
+            scrollAni(idx);
+        }
 
     });
 });
 
-//윈도우에서 스크롤 햇을 시 일어나는 일 
-window.addEventListener('scroll',function(){
+//scroll event
+window.addEventListener('scroll',scrollActive);
+
+//resize event
+window.addEventListener('resize', resize);
+
+function scrollAni(idx){
+    new Animate(window,{
+        prop : 'scroll',
+        value : posArr[idx],
+        duration : 500,
+        callback : function(){
+          return  enableClick = true;
+        }
+    });
+}
+function scrollActive(){
     const scroll = window.scrollY;
-    console.log(scroll);
     sections.forEach((sec,idx)=>{
         if(scroll >= posArr[idx]){
             for(const btn of btns){
@@ -31,10 +44,15 @@ window.addEventListener('scroll',function(){
                 btns[idx].classList.add('on');
             }
 
-            for(const sec of sections){
-                sec.classList.remove('on');
-                sections[idx].classList.add('on');
+            for(const section of sections){
+                section.classList.remove('on');
+                sec.classList.add('on');
             }   
         }
     });
-});
+}
+function resize(){ 
+    //각 섹션의 offsetTop값 구해서 빈배열에 담기
+    posArr = [];
+    for(const sec of sections) posArr.push(sec.offsetTop);
+}

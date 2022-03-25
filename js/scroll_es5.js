@@ -17,7 +17,11 @@ Scroll.prototype.init = function(){
 Scroll.prototype.bindingEvent = function(){
     this.btns.forEach((el,idx)=>{
         el.addEventListener('click', function(e){
-            this.scrollAni(idx);
+            if(this.enableClick){
+                this.enableClick=false;
+                e.preventDefault();
+                this.scrollAni(idx);
+            }
         }.bind(this));
     });
 

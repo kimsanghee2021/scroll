@@ -2,6 +2,7 @@ const sections  = document.querySelectorAll('section');
 const ul = document.querySelector('ul');
 const btns = ul.querySelectorAll('ul li');
 const btnsArr = Array.from(btns); //유사 배열 객체를 배열로 변경해주는 기능 
+const arrSec = Array.from(sections);
 let posArr = null;
 let enableClick = true;
 
@@ -25,11 +26,11 @@ window.addEventListener('scroll',scrollActive);
 //resize event
 window.addEventListener('resize', resize);
 
-//mouseWheel
+//mouseWheel - 마우스 휠이 한번만 움직여도 그 섹션으로 이동시키게하기
 sections.forEach(function(sec, idx){
     sec.addEventListener('mousewheel',function(e){
-        e.preventDefault();
-        mouseWheel();
+        //console.log(e);
+        mouseWheel(e);
     });
 });
 
@@ -69,6 +70,27 @@ function resize(){
     const activeIdx = btnsArr.indexOf(active);
     window.scroll(0,posArr[activeIdx]); 
 }
-function mouseWheel(){
+
+function mouseWheel(e){
+    const activeSec = document.querySelector('section.on');
+    const arrSecIdx = arrSec.indexOf(activeSec);
+
     
+    // if(e.deltaY > 0) if(arrSecIdx !== sections.length-1) scrollAni(arrSecIdx+1);       
+    
+    // if(e.deltaY < 0) if(arrSecIdx !== 0) scrollAni(arrSecIdx-1);
+
+
+
+    if(e.deltaY > 0 ){
+        console.log('아래로 내려간다.',);
+        if(arrSecIdx !== sections.length-1){
+            scrollAni(arrSecIdx+1); //맨위로 올려주는것
+        }
+    } else if(e.deltaY < 0){
+        console.log('위로올라간다.');
+        if(arrSecIdx !== 0){
+            scrollAni(arrSecIdx-1);
+        }
+    }
 }

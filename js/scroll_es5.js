@@ -22,8 +22,8 @@ Scroll.prototype.bindingEvent = function(){
     });
 
 
-    window.addEventListener('scroll',this.scrollActive);
-    window.addEventListener('resize', this.resize);
+    window.addEventListener('scroll',this.scrollActive.bind(this));
+    window.addEventListener('resize', this.resize.bind(this));
 
     this.sections.forEach(function(sec, idx){
         sec.addEventListener('mousewheel',function(e){
@@ -36,7 +36,7 @@ Scroll.prototype.bindingEvent = function(){
 Scroll.prototype.scrollAni = function(idx){
     new Animate(window,{
         prop : 'scroll',
-        value : this.posArr[idx],
+        value : posArr[idx],
         duration : 500,
     });
 }
@@ -44,7 +44,7 @@ Scroll.prototype.scrollAni = function(idx){
 Scroll.prototype.scrollActive= function(){
     const scroll = window.scrollY;
     this.sections.forEach(function(sec,idx){
-        if(scroll >= this.posArr[idx]){
+        if(scroll >= posArr[idx]){
             for(const btn of this.btns){
                 btn.classList.remove('on');
                 this.btns[idx].classList.add('on');
@@ -54,15 +54,15 @@ Scroll.prototype.scrollActive= function(){
                 sec.classList.add('on');
             }   
         }
-    });
+    }.bind(this));
 }
 Scroll.prototype.resize = function(){ 
     //각 섹션의 offsetTop값 구해서 빈배열에 담기
-    this.posArr = [];
-    for(const sec of this.sections) this.posArr.push(sec.offsetTop);
+    posArr = [];
+    for(const sec of this.sections) posArr.push(sec.offsetTop);
     const active = this.ul.querySelector('li.on');
     const activeIdx = this.btnsArr.indexOf(active);
-    window.scroll(0,this.posArr[activeIdx]); 
+    window.scroll(0,posArr[activeIdx]); 
 }
 
 Scroll.prototype.mouseWheel = function(e){

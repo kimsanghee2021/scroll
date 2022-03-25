@@ -25,11 +25,13 @@ Scroll.prototype.bindingEvent = function(){
     window.addEventListener('scroll',this.scrollActive.bind(this));
     window.addEventListener('resize', this.resize.bind(this));
 
-    this.sections.forEach(function(sec, idx){
-        sec.addEventListener('mousewheel',function(e){
-            this.mouseWheel(e);
-        }.bind(this));
+    this.sections.forEach((section)=>{
+        section.addEventListener('mousewheel',function(e){
+            e.preventDefault();
+            this.mousewheel(e);
+        }.bind(this))
     });
+
 }
 
 
@@ -38,7 +40,33 @@ Scroll.prototype.scrollAni = function(idx){
         prop : 'scroll',
         value : posArr[idx],
         duration : 500,
+        callback : function(){
+            this.enableClick =true;
+        }.bind(this)
     });
+}
+Scroll.prototype.mousewheel = function(e){
+    if(this.enableClick){
+        this.enableClick =false;
+        const activeEl = document.querySelector('section.on');
+        const arrSec = Array.from(this.sections);
+        const activeIdx = arrSec.indexOf(activeEl);
+
+        if(e.deltaY > 0){
+            if(activeIdx!== this.sections.length-1){
+                this.scrollAni(activeIdx + 1);
+            }else{
+                this.enableClick = true;
+            }
+        }
+        if (e.deltaY < 0){
+            if(activeIdx !== 0){
+                this.scrollAni(activeIdx-1);
+            } else{
+                this.enableClick = true;
+            }
+        }
+    }   
 }
 
 Scroll.prototype.scrollActive= function(){
@@ -65,18 +93,3 @@ Scroll.prototype.resize = function(){
     window.scroll(0,posArr[activeIdx]); 
 }
 
-Scroll.prototype.mouseWheel = function(e){
-    const activeSec = document.querySelector('section.on');
-    const arrSecIdx = this.arrSec.indexOf(activeSec);
-    if(e.deltaY > 0 ){
-        console.log('아래로 내려간다.',);
-        if(arrSecIdx !== this.sections.length-1){
-            this.scrollAni(arrSecIdx+1); //맨위로 올려주는것
-        }
-    } else if(e.deltaY < 0){
-        console.log('위로올라간다.');
-        if(arrSecIdx !== 0){
-            this.scrollAni(arrSecIdx-1);
-        }
-    }
-}

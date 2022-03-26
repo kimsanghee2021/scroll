@@ -2,33 +2,49 @@ class Scroll{
     constructor(){
         this.init();
         this.bindingEvent();
-        this.setPos();
     }
     init(){
-        this.sections= document.querySelectorAll('section');
+        this.sections  = document.querySelectorAll('section');
         this.ul = document.querySelector('ul');
-        this.lis = document.querySelectorAll('ul li'); 
-        this.lis_arr = Array.from( this.lis);
+        this.btns = this.ul.querySelectorAll('ul li');
+        this.btnsArr = Array.from(this.btns);
+        this.arrSec = Array.from(this.sections);
         this.posArr = null;
         this.enableClick = true;
     }
     bindingEvent(){
-        window.addEventListener('resize',this.setPos);
-        window.addEventListener('scroll',this.activation);
-        this.lis.forEach((li,idx)=>{
-            li.addEventListener('click',e=>{
+        this.resize();
+
+        this.btns.forEach((el,idx)=>{
+            el.addEventListener('click', e=>{
                 if(this.enableClick){
                     this.enableClick=false;
                     e.preventDefault();
-                    this.movescroll(idx);
+                    this.scrollAni(idx);
                 }
             });
-        });
-        this.sections.forEach(section=>{
+        }); 
+        //이벤트문에 두번째 인수로 함수명이 바로 대입되어있는 경우는 
+        //화살표 함수로 변경할 wrapping 함수 자체가 없기 떄문에 직접 뒤에 bind(this)로 
+        //안쪽 this값 인스턴스로 고정시킨다.
+        window.addEventListener('scroll',this.scrollActive.bind(this));
+        window.addEventListener('resize', this.resize.bind(this));
+    
+        this.sections.forEach(section =>{
             section.addEventListener('mousewheel',e=>{
                 e.preventDefault();
                 this.mousewheel(e);
-            })
+            });
+        });
+    }
+    scrollAni(idx){
+        new Animate(window,{
+            prop : 'scroll',
+            value : this.posArr[idx],
+            duration : 500,
+            callback : ()=>{
+                this.enableClick =true;
+            }
         });
     }
     mousewheel(e){
@@ -38,54 +54,42 @@ class Scroll{
             const arrSec = Array.from(this.sections);
             const activeIdx = arrSec.indexOf(activeEl);
     
-            
             if(e.deltaY > 0){
                 if(activeIdx!== this.sections.length-1){
-                    this.movescroll(activeIdx + 1);
+                    this.scrollAni(activeIdx + 1);
                 }else{
                     this.enableClick = true;
                 }
             }
             if (e.deltaY < 0){
                 if(activeIdx !== 0){
-                    this.movescroll(activeIdx-1);
+                    this.scrollAni(activeIdx-1);
                 } else{
                     this.enableClick = true;
                 }
             }
-            
-        }    
+        }   
     }
-    setPos(){
-        this.posArr = [];
-        for(const sec of this.sections) this.posArr.push(sec.offsetTop);
-        const active = this.ul.querySelector('li.on');
-        const activeIndex = this.lis_arr.indexOf(active);  
-        window.scroll(0,this.posArr[activeIndex]); 
-    }
-    activation(){
-        let scroll = window.scrollY || window.pageYOffset;
+    scrollActive(){
+        const scroll = window.scrollY;
         this.sections.forEach((sec,idx)=>{
             if(scroll >= this.posArr[idx]){
-                for(const li of this.lis){
-                    li.classList.remove('on');
-                    this.lis[idx].classList.add('on');
+                for(const btn of this.btns){
+                    btn.classList.remove('on');
+                    this.btns[idx].classList.add('on');
                 }
                 for(const section of this.sections){
                     section.classList.remove('on');
                     sec.classList.add('on');
-                }
+                }   
             }
         });
     }
-    movescroll(idx){
-        new Animate(window,{
-            prop : 'scroll',
-            value : this.posArr[idx],
-            duration : 500,
-            callback :()=>{
-                this.enableClick =true;
-            }
-        });
+    resize (){ 
+        this.posArr = [];
+        for(const sec of this.sections) this.posArr.push(sec.offsetTop);
+        const active = this.ul.querySelector('li.on');
+        const activeIdx = this.btnsArr.indexOf(active);
+        window.scroll(0,this.posArr[activeIdx]); 
     }
 }

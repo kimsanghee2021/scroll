@@ -5,19 +5,19 @@
 }
 
 ul,
-ol {
+ol,
+li {
   list-style: none;
 }
 
 a {
   text-decoration: none;
-  outline: 0;
 }
 
 section {
   width: 100%;
-  position: relative;
   height: 100vh;
+  position: relative;
 }
 section:nth-of-type(1) {
   background: orange;
@@ -48,7 +48,7 @@ ul li {
   transition: 0.5s;
 }
 ul li.on {
-  height: 20px;
+  height: 100px;
   background: #111;
 }
 

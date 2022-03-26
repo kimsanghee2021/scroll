@@ -2,6 +2,7 @@ class Scroll{
     constructor(el, opt){
         let default_opt = {
             speed : 500,
+            base:0,
             autoScroll:false
         };
         let resulte_opt = {...default_opt,...opt};
@@ -16,6 +17,7 @@ class Scroll{
         this.arrSec = Array.from(this.sections);
         this.speed = opt.seed;
         this.autoScroll = opt.autoScroll;
+        this.base = opt.base;
         this.posArr = null;
         this.enableClick = true;
     }
@@ -62,25 +64,17 @@ class Scroll{
             const activeIdx = arrSec.indexOf(activeEl);
     
             if(e.deltaY > 0){
-                if(activeIdx!== this.sections.length-1){
-                    this.scrollAni(activeIdx + 1);
-                }else{
-                    this.enableClick = true;
-                }
+                activeIdx!== this.sections.length-1 ? this.scrollAni(activeIdx + 1) : this.enableClick = true;
             }
             if (e.deltaY < 0){
-                if(activeIdx !== 0){
-                    this.scrollAni(activeIdx-1);
-                } else{
-                    this.enableClick = true;
-                }
+                activeIdx !== 0 ? this.scrollAni(activeIdx-1):this.enableClick = true;
             }
         }   
     }
     scrollActive(){
         const scroll = window.scrollY;
         this.sections.forEach((sec,idx)=>{
-            if(scroll >= this.posArr[idx]){
+            if(scroll >= this.posArr[idx] + this.base){
                 for(const btn of this.btns){
                     btn.classList.remove('on');
                     this.btns[idx].classList.add('on');

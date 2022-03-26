@@ -19,9 +19,52 @@ section {
 
 	&:nth-of-type(1) {
 		background: orange;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		article {
+			width: 500px;
+			padding: 30px;
+			border: 1px solid #666;
+
+			path {
+				fill: green;
+				stroke: #000;
+				stroke-width: 10;
+			}
+		}
 	}
 	&:nth-of-type(2) {
 		background: hotpink;
+		padding: 10vw;
+		display: flex;
+		justify-content: space-between;
+		align-content: spacebetween;
+		flex-wrap: wrap;
+		perspective: 500px;
+
+		article {
+			width: 23%;
+			height: 15vh;
+			background: #fff;
+			transform: rotateY(200deg);
+			opacity: 0;
+			transition: 0.5s;
+
+			@for $i from 1 through 12 {
+				&:nth-of-type(#{$i}) {
+					transition-duration: 0.1s * $i;
+				}
+			}
+		}
+
+		&.on {
+			article {
+				opacity: 1;
+				transform: rotateY(0deg);
+			}
+		}
 	}
 	&:nth-of-type(3) {
 		background: aqua;

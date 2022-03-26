@@ -1,14 +1,21 @@
 class Scroll{
-    constructor(){
-        this.init();
+    constructor(el, opt){
+        let default_opt = {
+            speed : 500,
+            autoScroll:false
+        };
+        let resulte_opt = {...default_opt,...opt};
+        this.init(el,resulte_opt);
         this.bindingEvent();
     }
-    init(){
-        this.sections  = document.querySelectorAll('section');
+    init(el,opt){
+        this.sections  = document.querySelectorAll(el);
         this.ul = document.querySelector('ul');
         this.btns = this.ul.querySelectorAll('ul li');
         this.btnsArr = Array.from(this.btns);
         this.arrSec = Array.from(this.sections);
+        this.speed = opt.seed;
+        this.autoScroll = opt.autoScroll;
         this.posArr = null;
         this.enableClick = true;
     }
@@ -29,7 +36,7 @@ class Scroll{
         //안쪽 this값 인스턴스로 고정시킨다.
         window.addEventListener('scroll',this.scrollActive.bind(this));
         window.addEventListener('resize', this.resize.bind(this));
-    
+        if(!this.autoScroll) return;
         this.sections.forEach(section =>{
             section.addEventListener('mousewheel',e=>{
                 e.preventDefault();
@@ -41,7 +48,7 @@ class Scroll{
         new Animate(window,{
             prop : 'scroll',
             value : this.posArr[idx],
-            duration : 500,
+            duration : this.speed,
             callback : ()=>{
                 this.enableClick =true;
             }

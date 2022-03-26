@@ -1,7 +1,6 @@
 function Scroll(){
     this.init();
     this.bindingEvent();
-    this.resize();
 }
 
 
@@ -15,26 +14,26 @@ Scroll.prototype.init = function(){
     this.enableClick = true;
 }
 Scroll.prototype.bindingEvent = function(){
-    this.btns.forEach((el,idx)=>{
+    this.resize();
+    this.btns.forEach(function(el,idx){
         el.addEventListener('click', function(e){
             if(this.enableClick){
                 this.enableClick=false;
                 e.preventDefault();
                 this.scrollAni(idx);
             }
-        }.bind(this));
-    });
-
+        }.bind(this));//이벤트문 안쪽의 this값 인스턴스 고정
+    }.bind(this)); //forEach문 안쪽의 this값 인스턴스 고정
 
     window.addEventListener('scroll',this.scrollActive.bind(this));
     window.addEventListener('resize', this.resize.bind(this));
 
-    this.sections.forEach((section)=>{
+    this.sections.forEach(function(section){
         section.addEventListener('mousewheel',function(e){
             e.preventDefault();
             this.mousewheel(e);
-        }.bind(this))
-    });
+        }.bind(this));
+    }.bind(this));
 
 }
 
@@ -42,7 +41,7 @@ Scroll.prototype.bindingEvent = function(){
 Scroll.prototype.scrollAni = function(idx){
     new Animate(window,{
         prop : 'scroll',
-        value : posArr[idx],
+        value : this.posArr[idx],
         duration : 500,
         callback : function(){
             this.enableClick =true;
@@ -76,7 +75,7 @@ Scroll.prototype.mousewheel = function(e){
 Scroll.prototype.scrollActive= function(){
     const scroll = window.scrollY;
     this.sections.forEach(function(sec,idx){
-        if(scroll >= posArr[idx]){
+        if(scroll >= this.posArr[idx]){
             for(const btn of this.btns){
                 btn.classList.remove('on');
                 this.btns[idx].classList.add('on');
@@ -90,10 +89,10 @@ Scroll.prototype.scrollActive= function(){
 }
 Scroll.prototype.resize = function(){ 
     //각 섹션의 offsetTop값 구해서 빈배열에 담기
-    posArr = [];
-    for(const sec of this.sections) posArr.push(sec.offsetTop);
+    this.posArr = [];
+    for(const sec of this.sections) this.posArr.push(sec.offsetTop);
     const active = this.ul.querySelector('li.on');
     const activeIdx = this.btnsArr.indexOf(active);
-    window.scroll(0,posArr[activeIdx]); 
+    window.scroll(0,this.posArr[activeIdx]); 
 }
 

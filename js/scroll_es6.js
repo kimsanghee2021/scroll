@@ -104,9 +104,18 @@ class Scroll{
             sScroll = 0;
             path.style.strokeDashoffset = 1890 - sScroll;
         }
-
+        const box1 = document.querySelector('.box1');
+        const box2 = document.querySelector('.box2');
         //4번째 섹션의 스크롤 박스 영역 커스텀 모션 
-
+        if(scroll >= this.posArr[3]+this.base){
+            sScroll = scroll-(this.posArr[3]+this.base);
+            box1.style.transform = `translateX(${sScroll}px)`;
+            box2.style.transform = `translateX(${sScroll*2}px)`;
+        }else{
+            sScroll = 0;
+            box1.style.transform = `translateX(${sScroll}px)`;
+            box2.style.transform = `translateX(${sScroll}px)`;
+        }
     }
     resize (){ 
         this.posArr = [];

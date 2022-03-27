@@ -1,3 +1,4 @@
+@charset "UTF-8";
 * {
   margin: 0px;
   padding: 0px;
@@ -29,11 +30,22 @@ section:nth-of-type(1) article {
   width: 500px;
   padding: 30px;
   border: 1px solid #666;
+  /*
+  stroke-dasharray : 선의 빈칸크기 지정
+
+  stroke-dashoffset : 가시영역에서의 path시작 위치
+  */
 }
 section:nth-of-type(1) article path {
-  fill: green;
+  fill: rgba(0, 0, 0, 0.3);
   stroke: #000;
-  stroke-width: 10;
+  stroke-width: 2;
+  stroke-dasharray: 1000;
+  stroke-dashoffset: -1000;
+  transition: 2s;
+}
+section:nth-of-type(1) article:hover path {
+  stroke-dashoffset: 0;
 }
 section:nth-of-type(2) {
   background: hotpink;

@@ -27,11 +27,23 @@ section {
 			width: 500px;
 			padding: 30px;
 			border: 1px solid #666;
+/*
+stroke-dasharray : 선의 빈칸크기 지정
 
+stroke-dashoffset : 가시영역에서의 path시작 위치
+*/
 			path {
-				fill: green;
+				fill: rgba(0,0,0,0.3);
 				stroke: #000;
-				stroke-width: 10;
+				stroke-width: 2;
+				stroke-dasharray: 1000;  //가시영역에서의 path의 길이
+				stroke-dashoffset:-1000;
+				transition: 2s;
+			}
+			&:hover{
+				path{
+					stroke-dashoffset:0;
+				}
 			}
 		}
 	}

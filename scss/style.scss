@@ -33,16 +33,18 @@ stroke-dasharray : 선의 빈칸크기 지정
 stroke-dashoffset : 가시영역에서의 path시작 위치
 */
 			path {
-				fill: rgba(0,0,0,0.3);
+				fill: rgba(0,0,0,0);
 				stroke: #000;
 				stroke-width: 2;
 				stroke-dasharray: 1000;  //가시영역에서의 path의 길이
 				stroke-dashoffset:-1000;
-				transition: 2s;
+				transition: stroke-dashoffset 1s 0s, fill 1s 0s;
 			}
 			&:hover{
 				path{
 					stroke-dashoffset:0;
+					fill : rgba(0,0,0,0.3);
+					transition: stroke-dashoffset 1.5s 0s, fill 1s 1.5s;
 				}
 			}
 		}
@@ -80,9 +82,31 @@ stroke-dashoffset : 가시영역에서의 path시작 위치
 	}
 	&:nth-of-type(3) {
 		background: aqua;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		article{
+			width:500px; border:1px solid #777;
+			padding:50px;
+			path{
+				fill:transparent;
+				stroke: #000;
+				stroke-width:3;
+				stroke-dasharray:1890;
+				stroke-dashoffset: 1890;
+			}
+		}
 	}
 	&:nth-of-type(4) {
-		background: lightgreen;
+		background: lightgreen; position: relative;
+		.box1{
+			width:300px; height:300px;
+			background: #fff;
+		}
+		.box2{
+			width:300px; height:300px;
+			background: #000;
+		}
 	}
 }
 

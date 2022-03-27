@@ -33,11 +33,10 @@ class Scroll{
                 }
             });
         }); 
-        //이벤트문에 두번째 인수로 함수명이 바로 대입되어있는 경우는 
-        //화살표 함수로 변경할 wrapping 함수 자체가 없기 떄문에 직접 뒤에 bind(this)로 
-        //안쪽 this값 인스턴스로 고정시킨다.
+
         window.addEventListener('scroll',this.scrollActive.bind(this));
         window.addEventListener('resize', this.resize.bind(this));
+
         if(!this.autoScroll) return;
         this.sections.forEach(section =>{
             section.addEventListener('mousewheel',e=>{
@@ -73,6 +72,8 @@ class Scroll{
     }
     scrollActive(){
         const scroll = window.scrollY;
+
+        //모든 섹션의 공통 활성화
         this.sections.forEach((sec,idx)=>{
             if(scroll >= this.posArr[idx] + this.base){
                 for(const btn of this.btns){
@@ -85,6 +86,27 @@ class Scroll{
                 }   
             }
         });
+
+        const path = this.sections[2].querySelector('path'); //-스크롤 적용할 path요소
+        let sScroll = 0; //-해당 섹션에 도달하면 다시 0부터 증가될 스크롤값이 담길 변수
+
+        //3번째 섹션의 스크롤 박스 영역 커스텀모션
+        if(scroll >= this.posArr[2]+this.base){
+            //기존 스크롤 값에서 현재섹션의 위치값과 base값을 빼준 현재 스크롤 위치값
+            sScroll = (scroll - (this.posArr[2]+this.base))*6.5;
+
+            //sScroll값이 혹 전체 path길이의 넘어서는 걸 방지
+            if(sScroll >= 1890)sScroll = 1890;
+                //기존 stroke-offset값에 sScroll값 뺴주면서 연동
+                path.style.strokeDashoffset = 1890 - sScroll;
+            
+        } else{
+            sScroll = 0;
+            path.style.strokeDashoffset = 1890 - sScroll;
+        }
+
+        //4번째 섹션의 스크롤 박스 영역 커스텀 모션 
+
     }
     resize (){ 
         this.posArr = [];
